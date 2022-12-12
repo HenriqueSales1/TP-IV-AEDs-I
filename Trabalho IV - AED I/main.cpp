@@ -1,4 +1,4 @@
-// Trabalho feito por Thales Willian e Henrique Sales
+// Trabalho feito por Thales William e Henrique Sales
 // ATENÇÃO: todas as estruturas de comando que dizem respeito à Lista Duplamente Encadeada possuem um "2" após seu nome.
 
 #include <iostream>
@@ -16,7 +16,7 @@ void Menu()
     cout << "3. Sair\n\n";
 }
 
-void PreencheAuto(Lista *linhas, int *id)
+void PreencheAuto(Lista *linhas, int *id) // Preenche os dados de cada parada de uma das linhas da rodoviária.
 {
     Item item;
     item.id = *id;
@@ -67,7 +67,7 @@ void PreencheAuto(Lista *linhas, int *id)
     InsereListaUltimo(linhas, &item);
 }
 
-void ProcuraLinha(Lista *linhas)
+void ProcuraLinha(Lista *linhas) // Menu para procurar dados de uma linha da rodoviária. Especificado pelo usuário.
 {
     int op;
     while (op != 1 && op != 2 && op != 3)
@@ -121,7 +121,8 @@ void ProcuraLinha(Lista *linhas)
                             cout << "Preço da passagem: " << preco << endl;
                             cout << "Horário de saída: " << aOrigem->item.horario2 << endl;
                             cout << "Horário de chegada: " << aDestino->item.horario << endl;
-                            cout << endl << endl;
+                            cout << endl
+                                 << endl;
                             rotas++;
                         }
                         preco += aOrigem->item.passagem;
@@ -132,6 +133,9 @@ void ProcuraLinha(Lista *linhas)
             }
             linha = linha->prox;
         }
+
+        // Os "ifs" abaixo fazem verificação de inserção.
+
         if (!OrigemExist)
         {
             cout << "\nOrigem inexistente.\n\n";
@@ -148,7 +152,7 @@ void ProcuraLinha(Lista *linhas)
         system("cls");
         return;
     }
-    if (op == 2)
+    if (op == 2) // Parte do menu dedicada à consulta de uma linha específica, dada pelo seu ID.
     {
         cout << "Insira o ID da linha: ";
         Apontador aux;
@@ -175,6 +179,8 @@ void ProcuraLinha(Lista *linhas)
     }
 }
 
+// Funções da Manutenção abaixo.
+
 void IncluiLinha(Lista *linhas, int *id)
 {
     Item linha;
@@ -188,8 +194,8 @@ void IncluiLinha(Lista *linhas, int *id)
 
     cout << "\n\nLinha criada.\n\n";
 
-    CriaListaVazia2(&linha.paradas);
-    InsereListaUltimo(linhas, &linha);
+    CriaListaVazia2(&linha.paradas);   // Cria uma lista nova, vazia (sem paradas).
+    InsereListaUltimo(linhas, &linha); // Insere uma nova linha na lista de linhas.
 
     *id += 1;
 }
@@ -221,7 +227,7 @@ void IncluiParada(Lista *linhas)
     cout << "Insira o valor da passagem: ";
     cin >> parada.passagem;
 
-    if (VerificaListaVazia2(&aux->item.paradas))
+    if (VerificaListaVazia2(&aux->item.paradas)) // Caso a linha não possua nenhuma parada, a condição retorna ao usuário.
     {
         cout << "Linha sem paradas.\n\n";
         cout << "A parada foi inserida.\n\n";
@@ -230,22 +236,25 @@ void IncluiParada(Lista *linhas)
 
         return;
     }
-    ImprimeLista2(&aux->item.paradas);
+
+    ImprimeLista2(&aux->item.paradas); // Caso a linha não esteja vazia, o programa mostra ao usuário as paradas já inseridas
+                                       // e pergunta ao usuário onde deseja inserí-la.
 
     cout << "Onde deseja incluir a parada? (Digite ''0'' para inserí-la no início).\n";
     cout << "ID: ";
     cin >> id;
 
-    if (id == 0)
+    if (id == 0) // Se deseja inserí-la no começo, o programa irá utilizar a função para colocá-la antes da primeira parada.
     {
         InsereListaPrimeiro2(&aux->item.paradas, parada);
         cout << "\nParada inserida.\n\n";
         return;
     }
-    InsereAposElemento2(&aux->item.paradas, parada, id);
+    InsereAposElemento2(&aux->item.paradas, parada, id); // Caso contrário, o programa irá inserí-la após a parada desejada.
 }
 
-void AlteraParada(Lista *linhas)
+void AlteraParada(Lista *linhas) // Essa função utiliza basicamente a mesma estrutura de pesquisa da função passada, porém
+                                 // dará ao usuário a opção de alterar os dados de uma certa parada.
 {
     int id;
 
@@ -293,7 +302,7 @@ void AlteraParada(Lista *linhas)
     cin >> aux2->item.passagem;
 }
 
-void EliminaParada(Lista *linhas)
+void EliminaParada(Lista *linhas) // Função utilizada para excluir apenas uma parada de uma linha.
 {
     int id;
 
@@ -331,7 +340,7 @@ void EliminaParada(Lista *linhas)
     cout << "\nParada removida da linha.\n\n";
 }
 
-void EliminaLinha(Lista *linhas)
+void EliminaLinha(Lista *linhas) // Função utilizada para remover por completo uma das linhas.
 {
     int id;
 
@@ -406,7 +415,6 @@ void Manutencao(Lista *linhas, int *id)
 int main()
 {
     UINT CPAGE_UTF8 = 65001;
-    // UINT CPAGE_DEFAULT = GetConsoleOutputCP();
     SetConsoleOutputCP(CPAGE_UTF8);
 
     int idLinhas = 1;
@@ -419,10 +427,13 @@ int main()
 
     ImprimeLista2(&linhas.ultimo->item.paradas);
     cout << "--------------------------------------\n\n";
+    
     int esc;
 
     while (esc != 3)
     {
+        ImprimeLista2(&linhas.ultimo->item.paradas);
+        cout << "--------------------------------------\n\n";
         Menu();
 
         cin >> esc;
@@ -447,8 +458,17 @@ int main()
             }
             else
             {
-                cout << "\nSenha inválida.\nConsulte o administrativo caso tenha esquecido.\n";
+                system("cls");
+                cout << "\nSenha inválida.\nConsulte o administrativo caso tenha esquecido.\n\n";
+                system("pause");
+                system("cls");
             }
+        }
+        else if (esc == 3)
+        {
+            system("cls");
+            cout << "Volte sempre!\n";
+            break;
         }
     }
     return 0;
